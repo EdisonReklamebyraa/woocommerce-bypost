@@ -69,16 +69,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'label' => 'Slå på Bypost fraktalternativer',
               'default' => 'no'
             ],
-            'kundenummer' => [
-              "title" => "Kundenummer",
+            'bypost_key' => [
+              "title" => "Bypost API-nøkkel",
               "type" => "text",
             ],
             'kundetelefon' => [
               "title" => "Telefonnummer",
-              "type" => "text",
-            ],
-            'bypost_key' => [
-              "title" => "Bypost API-nøkkel",
               "type" => "text",
             ],
 
@@ -89,7 +85,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'title'    => 'Fraktnavn',
               'type'     => 'text',
               'desc_tip' => 'Dette styrer hvilken tittel sluttbruker ser i kassen.',
-              'default'  => __('Bypost frakt', 'bring-fraktguiden-for-woocommerce'),
+              'default'  => __('Bypost frakt', 'bypost'),
             ],
             'fraktpris'                  => [
               'title'             => 'Fraktpris, til hentested',
@@ -104,32 +100,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'desc_tip'          => 'Fastpris på frakt. Brukes bare hvis den er fyllt inn',
               'css'               => 'width: 8em;',
               'default'           => '',
-            ],
-            'from_zip'                      => [
-              'title'       => __('From zip', 'bring-fraktguiden-for-woocommerce'),
-              'type'        => 'text',
-              'placeholder' => __('ie: 0159', 'bring-fraktguiden-for-woocommerce'),
-              'desc_tip'    => __('Dette er postnummeret som du sender fra, f.eks postnummeret til postkontoret', 'bring-fraktguiden-for-woocommerce'),
-              'css'         => 'width: 8em;',
-              'default'     => '',
-            ],
-            'availability'                  => [
-              'title'   => 'Fra områder',
-              'type'    => 'select',
-              'default' => 'all',
-              'class'   => 'availability',
-              'options' => [
-                'all'      => __('All allowed countries', 'bring-fraktguiden-for-woocommerce'),
-                'specific' => __('Specific Countries', 'bring-fraktguiden-for-woocommerce'),
-              ],
-            ],
-            'countries'                     => [
-              'title'   => 'Fra land',
-              'type'    => 'multiselect',
-              'class'   => 'chosen_select',
-              'css'     => 'width: 400px;',
-              'default' => '',
-              'options' => $woocommerce->countries->countries,
             ],
           ];
         }

@@ -12,8 +12,6 @@ add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
 function bypost_status_change($order_id, $from, $to) {
   // Denne blir kjørt når ordrestatusen blir endret.
   $order = new WC_Order($order_id);
-  error_log(print_r($from, true));
-  error_log(print_r($to, true));
 }
 
 /**
@@ -71,8 +69,6 @@ function create_order_in_bypost( $order_id ) {
     "delivery_method"      => $shipping_method,
   ];
 
-  error_log(print_r($data, true));
-
   $payload = json_encode(['order' => $data]);
   $url = "https://minbypost.ploi.r8.is/api/createParcelOrder";
   $bearer = $bypost_key;
@@ -96,7 +92,6 @@ function create_order_in_bypost( $order_id ) {
 
   $response = curl_exec($curl);
   curl_close($curl);
-  error_log(print_r($response, true));
 
   $order->update_meta_data('packing_slip', json_decode($response)->label);
   $order->update_meta_data('tracking_url', json_decode($response)->tracking);
