@@ -23,8 +23,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         {
           $this->id                 = 'bypost_shipping_method'; // Id for bypost shipping method. Should be uunique.
           $this->instance_id        = absint($instance_id);
-          $this->method_title       = __('Bypost');  // Title shown in admin
-          $this->method_description = __('Frakt med Bypost'); // Description shown in admin
+          $this->method_title       = __('Bypost', 'bypost-woo');  // Title shown in admin
+          $this->method_description = __('Frakt med Bypost', 'bypost-woo'); // Description shown in admin
           $this->supports           = array(
             'shipping-zones',
             'settings',
@@ -32,7 +32,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
           );
           $this->init();
 
-          $this->title              = "Bypost"; // This can be added as an setting but for this example its forced.
+          $this->title              = __("Bypost", 'bypost-woo'); // This can be added as an setting but for this example its forced.
         }
 
         /**
@@ -77,24 +77,26 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               "title" => "Telefonnummer",
               "type" => "text",
             ],
-
-            /**
-             * Andre felter
-             */
-            'title'                         => [
-              'title'    => 'Fraktnavn',
-              'type'     => 'text',
-              'desc_tip' => 'Dette styrer hvilken tittel sluttbruker ser i kassen.',
-              'default'  => __('Bypost frakt', 'bypost'),
+            'hentested_label' => [
+              'title' => 'Fraktnavn, hentested',
+              'type' => 'text',
+              'description' => __('Her kan du velge hva produktet "til hentested" skal hete i kassen.', 'bypost-woo'),
+              'default'  => __('Bypost: Til hentested', 'bypost'),
             ],
-            'fraktpris'                  => [
-              'title'             => 'Fraktpris, til hentested',
+            'fraktpris' => [
+              'title'             => __('Fraktpris, til hentested', 'bypost-woo'),
               'type'              => 'number',
-              'desc_tip'          => 'Fastpris på frakt',
+              'description'       => __('Fastpris på frakt', 'bypost-woo'),
               'css'               => 'width: 8em;',
               'default'           => '',
             ],
-            'heltfrem'            => [
+            'heltfrem_label' => [
+              'title' => 'Fraktnavn, til døren',
+              'description' => 'Her kan du velge hva produktet "til døren" skal hete i kassen.',
+              'type' => 'text',
+              'default' => 'Bypost: På døra'
+            ],
+            'heltfrem' => [
               'title'             => 'Fraktpris, til døren',
               'type'              => 'number',
               'desc_tip'          => 'Fastpris på frakt. Brukes bare hvis den er fyllt inn',
@@ -115,18 +117,20 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         {
           if ($this->get_option('fraktpris')) {
             $flat_rate = array(
-              'id' => 'fastpris',
-              'label' => "Bypost: Til hentested",
+              'id' => 'arnold',
+              'label' => $this->get_option('hentested_label') ?? "",
               'cost' => $this->get_option('fraktpris'),
+              'meta_data' => ['bring_id' => 5800],
             );
             $this->add_rate($flat_rate);
           }
 
           if ($this->get_option('heltfrem')) {
             $door_rate = array(
-              'id' => 'heltfrem',
-              'label' => "Bypost: På døren",
+              'id' => 'hey',
+              'label' => $this->get_option('heltfrem_label'),
               'cost' => $this->get_option('heltfrem'),
+              'meta_data' => ['bring_id' => 5600],
             );
             $this->add_rate($door_rate);
           }

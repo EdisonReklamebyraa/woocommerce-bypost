@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 
 require_once __DIR__ . '/classes/class-bypost.php';
 require_once __DIR__ . '/includes/bypost-api.php';
-require_once __DIR__ . '/includes/woo-admin.php';
+require_once __DIR__ . '/includes/order-meta-fields.php';
 
 add_action('plugins_loaded', 'Bypost::init');
 register_deactivation_hook(__FILE__, 'Bypost::plugin_deactivate');

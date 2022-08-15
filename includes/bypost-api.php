@@ -24,19 +24,6 @@ add_action('woocommerce_checkout_order_processed', 'create_order_in_bypost' );
 function create_order_in_bypost( $order_id ) {
   $order = new WC_Order($order_id);
 
-  $shipping_method = [];
-  if ($order->get_shipping_method() === "Bypost: Til hentested") {
-    $shipping_method = [
-      'title' => 'Levert til hentested',
-      'bring_id' => '5800'
-    ];
-  } else {
-    $shipping_method = [
-      'title' => 'Levert på døren',
-      'bring_id' => '5600',
-    ];
-  }
-
   // Finn bypostnøkkelen
   $wc_methods = WC()->shipping;
   $bypost_key = null;
@@ -50,6 +37,8 @@ function create_order_in_bypost( $order_id ) {
       }
     }
   }
+
+  $shipping_method = reset($order->get_shipping_methods())->get_meta('bring_id');
 
   $data = [
     "customer_name"        => get_option('woocommerce_email_from_name') ?? '',
