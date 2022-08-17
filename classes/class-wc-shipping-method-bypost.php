@@ -76,12 +76,13 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             'kundetelefon' => [
               "title" => "Telefonnummer",
               "type" => "text",
+              "description" => __('Dette trengs for å bestille frakt med Bring', 'bypost-woo')
             ],
             'hentested_label' => [
-              'title' => 'Fraktnavn, hentested',
+              'title' => __('Fraktnavn, hentested', 'bypost-woo'),
               'type' => 'text',
               'description' => __('Her kan du velge hva produktet "til hentested" skal hete i kassen.', 'bypost-woo'),
-              'default'  => __('Bypost: Til hentested', 'bypost'),
+              'default'  => __('Bypost: Til hentested', 'bypost-woo'),
             ],
             'fraktpris' => [
               'title'             => __('Fraktpris, til hentested', 'bypost-woo'),

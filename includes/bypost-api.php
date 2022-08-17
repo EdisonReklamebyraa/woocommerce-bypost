@@ -10,31 +10,25 @@ add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
  * @param to er hvilken status ordren har blitt endret til
  */
 function bypost_status_change($order_id, $from, $to) {
-  // Denne blir kjørt når ordrestatusen blir endret.
-  $order = new WC_Order($order_id);
+  if ($to === "completed") {
+    create_order_in_bypost($order_id);
+  }
 }
 
 /**
- * Dette blir kjørt når en checkout er fullført.
  * Dette gjør en POST mot min.bypost-API'et, med
  * data som trengs for å bestille en pakkesending fra Bring.
  */
-add_action('woocommerce_checkout_order_processed', 'create_order_in_bypost' );
-
 function create_order_in_bypost( $order_id ) {
   $order = new WC_Order($order_id);
 
   // Finn bypostnøkkelen
-  $wc_methods = WC()->shipping;
+  $wc_methods = WC()->shipping->get_shipping_methods();
   $bypost_key = null;
   foreach ($wc_methods as $method) {
-    if (is_array($method)) {
-      foreach ($method as $item) {
-        if (is_object($item) && $item->get_option('bypost_key')) {
-          $bypost_key = $item->get_option('bypost_key');
-          $phone = $item->get_option('kundetelefon');
-        }
-      }
+    if ($method->id === 'bypost_shipping_method') {
+      $bypost_key = $method->get_option('bypost_key');
+      $phone = $method->get_option('kundetelefon');
     }
   }
 
