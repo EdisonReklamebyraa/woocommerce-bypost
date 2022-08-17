@@ -23,7 +23,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         {
           $this->id                 = 'bypost_shipping_method'; // Id for bypost shipping method. Should be uunique.
           $this->instance_id        = absint($instance_id);
-          $this->method_title       = __('Dette er min', 'bypost-woo');  // Title shown in admin
+          $this->method_title       = __('Bypost', 'bypost-woo');  // Title shown in admin
           $this->method_description = __('Frakt med Bypost', 'bypost-woo'); // Description shown in admin
           $this->supports           = array(
             'shipping-zones',
