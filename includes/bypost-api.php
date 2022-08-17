@@ -53,7 +53,7 @@ function create_order_in_bypost( $order_id ) {
   ];
 
   $payload = json_encode(['order' => $data]);
-  $url = "https://minbypost.ploi.r8.is/api/createParcelOrder";
+  $url = "https://minbypost.no/api/createParcelOrder";
   $bearer = $bypost_key;
 
   $curl = curl_init();
