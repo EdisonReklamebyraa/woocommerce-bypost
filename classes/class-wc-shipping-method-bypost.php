@@ -23,7 +23,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         {
           $this->id                 = 'bypost_shipping_method'; // Id for bypost shipping method. Should be uunique.
           $this->instance_id        = absint($instance_id);
-          $this->method_title       = __('Bypost', 'bypost-woo');  // Title shown in admin
+          $this->method_title       = __('Dette er min', 'bypost-woo');  // Title shown in admin
           $this->method_description = __('Frakt med Bypost', 'bypost-woo'); // Description shown in admin
           $this->supports           = array(
             'shipping-zones',
@@ -78,29 +78,29 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               "type" => "text",
               "description" => __('Dette trengs for å bestille frakt med Bring', 'bypost-woo')
             ],
-            'hentested_label' => [
+            'pickup_point_label' => [
               'title' => __('Fraktnavn, hentested', 'bypost-woo'),
               'type' => 'text',
-              'description' => __('Her kan du velge hva produktet "til hentested" skal hete i kassen.', 'bypost-woo'),
-              'default'  => __('Bypost: Til hentested', 'bypost-woo'),
+              'description' => __('Her kan du velge hva fraktalternativet "hentested" skal hete i kassen.', 'bypost-woo'),
+              'default'  => __('Bypost: Hentested', 'bypost-woo'),
             ],
-            'fraktpris' => [
-              'title'             => __('Fraktpris, til hentested', 'bypost-woo'),
+            'pickup_point' => [
+              'title'             => __('Fraktpris, hentested', 'bypost-woo'),
               'type'              => 'number',
-              'description'       => __('Fastpris på frakt', 'bypost-woo'),
+              'description'       => __('Aktiver levering til hentested ved å fylle inn pris.', 'bypost-woo'),
               'css'               => 'width: 8em;',
               'default'           => '',
             ],
-            'heltfrem_label' => [
-              'title' => 'Fraktnavn, til døren',
-              'description' => 'Her kan du velge hva produktet "til døren" skal hete i kassen.',
+            'door_delivery_label' => [
+              'title' => __('Fraktnavn, hjemlevering', 'bypost-woo'),
+              'description' => __('Her kan du velge hva fraktalternativet "hjemlevering" skal hete i kassen.', 'bypost-woo'),
               'type' => 'text',
-              'default' => 'Bypost: På døra'
+              'default' => 'Bypost: Hjemlevering'
             ],
-            'heltfrem' => [
-              'title'             => 'Fraktpris, til døren',
+            'door_delivery' => [
+              'title'             => 'Fraktpris, hjemlevering',
               'type'              => 'number',
-              'desc_tip'          => 'Fastpris på frakt. Brukes bare hvis den er fyllt inn',
+              'description'          => 'Aktiver hjemlevering ved å fylle inn pris.',
               'css'               => 'width: 8em;',
               'default'           => '',
             ],
@@ -116,21 +116,21 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
          */
         public function calculate_shipping($package = array())
         {
-          if ($this->get_option('fraktpris')) {
+          if ($this->get_option('pickup_point')) {
             $flat_rate = array(
               'id' => 'arnold',
-              'label' => $this->get_option('hentested_label') ?? "",
-              'cost' => $this->get_option('fraktpris'),
+              'label' => $this->get_option('pickup_point_label') ?? "",
+              'cost' => $this->get_option('pickup_point'),
               'meta_data' => ['bring_id' => 5800],
             );
             $this->add_rate($flat_rate);
           }
 
-          if ($this->get_option('heltfrem')) {
+          if ($this->get_option('door_delivery')) {
             $door_rate = array(
               'id' => 'hey',
-              'label' => $this->get_option('heltfrem_label'),
-              'cost' => $this->get_option('heltfrem'),
+              'label' => $this->get_option('door_delivery_label'),
+              'cost' => $this->get_option('door_delivery'),
               'meta_data' => ['bring_id' => 5600],
             );
             $this->add_rate($door_rate);

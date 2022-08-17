@@ -75,7 +75,7 @@ function create_order_in_bypost( $order_id ) {
 
   $response = curl_exec($curl);
   curl_close($curl);
-
+  error_log(print_r($response, true));
   $order->update_meta_data('packing_slip', json_decode($response)->label);
   $order->update_meta_data('tracking_url', json_decode($response)->tracking);
   $order->save();
