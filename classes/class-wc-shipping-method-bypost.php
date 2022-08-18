@@ -80,7 +80,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             ],
             'pickup_point' => [
               'title'             => __('Fraktpris, hentested', 'bypost-woo'),
-              'type'              => 'number',
+              'type'              => 'decimal',
               'description'       => __('Aktiver levering til hentested ved å fylle inn pris.', 'bypost-woo'),
               'css'               => 'width: 8em;',
               'default'           => '',
@@ -93,7 +93,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             ],
             'door_delivery' => [
               'title'             => 'Fraktpris, hjemlevering',
-              'type'              => 'number',
+              'type'              => 'decimal',
               'description'          => 'Aktiver hjemlevering ved å fylle inn pris.',
               'css'               => 'width: 8em;',
               'default'           => '',
