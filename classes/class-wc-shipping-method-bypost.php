@@ -28,7 +28,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
           $this->supports           = array(
             'shipping-zones',
             'settings',
-            'instance-settings',
           );
           $this->init();
 
@@ -60,7 +59,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
          * @return void
          */
         function init_form_fields() {
-          global $woocommerce;
           // Add settings here
           $this->form_fields = [
             'bypost_key' => [
@@ -98,6 +96,13 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'css'               => 'width: 8em;',
               'default'           => '',
             ],
+            'free_shipping' => [
+              'title'             => 'Gratis frakt over gitt beløp',
+              'type'              => 'number',
+              'description'          => 'Fyll inn beløp for å aktivere gratis frakt',
+              'css'               => 'width: 8em;',
+              'default'           => '',
+            ],
           ];
         }
 
@@ -110,27 +115,47 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
          */
         public function calculate_shipping($package = array())
         {
-          if ($this->get_option('pickup_point')) {
-            $flat_rate = array(
-              'id' => 'arnold',
-              'label' => $this->get_option('pickup_point_label') ?? "",
-              'cost' => $this->get_option('pickup_point'),
-              'meta_data' => ['bring_id' => 5800],
-            );
-            $this->add_rate($flat_rate);
+          if ($this->get_option('free_shipping') && $package['contents_cost'] > $this->get_option('free_shipping')) {
+            if ($this->get_option('door_delivery')) {
+              $door_rate = array(
+                'id' => 'hey',
+                'label' => $this->get_option('door_delivery_label') ? __('Gratis frakt: ') . $this->get_option('door_delivery_label') : "",
+                'cost' => 0,
+                'meta_data' => ['bring_id' => 5600],
+              );
+              $this->add_rate($door_rate);
+            }
+            if ($this->get_option('pickup_point')) {
+              $pickup_rate = array(
+                'id' => 'arnold',
+                'label' => $this->get_option('pickup_point_label') ? __('Gratis frakt: ') . $this->get_option('pickup_point_label') : "",
+                'cost' => 0,
+                'meta_data' => ['bring_id' => 5800],
+              );
+              $this->add_rate($pickup_rate);
+            }
+            return;
           }
+            if ($this->get_option('pickup_point')) {
+              $pickup_rate = array(
+                'id' => 'arnold',
+                'label' => $this->get_option('pickup_point_label') ?? "",
+                'cost' => $this->get_option('pickup_point'),
+                'meta_data' => ['bring_id' => 5800],
+              );
+              $this->add_rate($pickup_rate);
+            }
 
-          if ($this->get_option('door_delivery')) {
-            $door_rate = array(
-              'id' => 'hey',
-              'label' => $this->get_option('door_delivery_label'),
-              'cost' => $this->get_option('door_delivery'),
-              'meta_data' => ['bring_id' => 5600],
-            );
-            $this->add_rate($door_rate);
+            if ($this->get_option('door_delivery')) {
+              $door_rate = array(
+                'id' => 'hey',
+                'label' => $this->get_option('door_delivery_label'),
+                'cost' => $this->get_option('door_delivery'),
+                'meta_data' => ['bring_id' => 5600],
+              );
+              $this->add_rate($door_rate);
+            }
           }
-
-        }
       }
     }
   }
