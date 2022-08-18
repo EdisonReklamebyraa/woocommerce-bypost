@@ -63,12 +63,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
           global $woocommerce;
           // Add settings here
           $this->form_fields = [
-            'enabled' => [
-              'title' => "Slå på",
-              'type' => 'checkbox',
-              'label' => 'Slå på Bypost fraktalternativer',
-              'default' => 'no'
-            ],
             'bypost_key' => [
               "title" => "Bypost API-nøkkel",
               "type" => "text",
