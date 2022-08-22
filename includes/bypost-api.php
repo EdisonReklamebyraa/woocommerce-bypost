@@ -54,7 +54,7 @@ function create_order_in_bypost( $order_id ) {
   ];
   $payload = json_encode(['order' => $data]);
   error_log('Data prepared for min.bypost: ' . print_r(json_decode($payload), true));
-  $url = "https://minbypost.no/api/createParcelOrder";
+  $url = "https://min.bypost.no/api/createParcelOrder";
   error_log('Using endpoint: ' . $url);
   $bearer = $bypost_key;
   error_log('Current API-Key: ' . $bearer);
