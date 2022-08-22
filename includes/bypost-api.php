@@ -11,6 +11,7 @@ add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
  */
 function bypost_status_change($order_id, $from, $to) {
   if ($to === "completed") {
+    error_log('Order is set to complete. Creating order with API.');
     create_order_in_bypost($order_id);
   }
 }
@@ -33,7 +34,7 @@ function create_order_in_bypost( $order_id ) {
   }
 
   $shipping_method = reset($order->get_shipping_methods())->get_meta('bring_id');
-
+  error_log('Current shipping method: ' . $shipping_method);
   $data = [
     "customer_name"        => get_option('woocommerce_email_from_name') ?? '',
     "customer_address_1"   => get_option('woocommerce_store_address') ?? '',
@@ -51,10 +52,12 @@ function create_order_in_bypost( $order_id ) {
     "recipient_phone"      => $order->get_billing_phone() ?? '',
     "delivery_method"      => $shipping_method,
   ];
-
   $payload = json_encode(['order' => $data]);
+  error_log('Data prepared for min.bypost: ' . print_r(json_decode($payload), true));
   $url = "https://minbypost.no/api/createParcelOrder";
+  error_log('Using endpoint: ' . $url);
   $bearer = $bypost_key;
+  error_log('Current API-Key: ' . $bearer);
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
@@ -75,8 +78,24 @@ function create_order_in_bypost( $order_id ) {
 
   $response = curl_exec($curl);
   curl_close($curl);
-  error_log(print_r($response, true));
-  $order->update_meta_data('packing_slip', json_decode($response)->label);
-  $order->update_meta_data('tracking_url', json_decode($response)->tracking);
-  $order->save();
+  if ($response) {
+    error_log('Response from API: ' . print_r($response, true));
+    $order->update_meta_data('packing_slip', json_decode($response)->label);
+    $order->update_meta_data('tracking_url', json_decode($response)->tracking);
+    $order->save();
+    error_log('Added packing slip and tracking url to order metadata');
+  } else {
+    error_log('Error: ' . print_r($response, true));
+  }
 }
+
+/**
+ * Validate API-key
+ */
+// add_action('added_option', 'validate_bypost_key', 10, 2);
+add_action('updated_option', 'validate_bypost_key', 10, 3);
+
+function validate_bypost_key($option, $old_value, $value) {
+  // error_log($option);
+}
+
