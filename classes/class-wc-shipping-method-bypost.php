@@ -14,7 +14,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
       class WC_bypost_Shipping_Method extends WC_Shipping_Method
       {
         /**
-         * Construcotr for bypost shipping class. Noen påkrevde felter, og noen opsjoner.
+         * Constructor for bypost shipping class. Noen påkrevde felter, og noen opsjoner.
          *
          * @access public
          * @return void
@@ -115,7 +115,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
          */
         public function calculate_shipping($package = array())
         {
-          if ($this->get_option('free_shipping') && $package['contents_cost'] > $this->get_option('free_shipping')) {
+          if ($this->get_option('free_shipping') && $package['cart_subtotal'] >= $this->get_option('free_shipping')) {
             if ($this->get_option('door_delivery')) {
               $door_rate = array(
                 'id' => 'hey',
