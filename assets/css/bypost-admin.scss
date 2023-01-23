@@ -1,0 +1,52 @@
+.bypost-settings {
+  max-width: 600px;
+  & .titledesc label {
+    font-weight: 700;
+    font-size: 14px;
+  }
+  & input + p {
+    margin: unset;
+    color: #888;
+  }
+  & input[type="text"] {
+    width: 100%;
+  }
+  & h3 {
+    margin-top: unset;
+  }
+  & .hidden {
+    display:none;
+  }
+  #woocommerce_bypost_shipping_method_pickup_point_heading {
+    margin-top: 2rem;
+  }
+  & .group-heading {
+    padding-top: 2rem !important;
+    border-top: 1px solid #aaa;
+    display: inline-grid;
+    grid-template-columns: 224px 1fr; // width 200 + padding
+    position: relative;
+    &::before {
+      color: black;
+      position: absolute;
+      top: 1rem;
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+  & .group-heading--door {
+    &::before {
+      content: 'Hentested';
+    }
+  }
+  & .group-heading--pickup {
+    &::before {
+      content: 'På døren';
+    }
+  }
+  & .group-heading--mailbox {
+    &::before {
+      content: 'Postkasse (0-2kg)';
+    }
+  }
+}
