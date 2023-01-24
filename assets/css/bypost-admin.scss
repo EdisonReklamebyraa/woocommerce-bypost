@@ -36,12 +36,12 @@
   }
   & .group-heading--door {
     &::before {
-      content: 'Hentested';
+      content: 'På døren';
     }
   }
   & .group-heading--pickup {
     &::before {
-      content: 'På døren';
+      content: 'Hentested';
     }
   }
   & .group-heading--mailbox {
