@@ -80,7 +80,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             'pickup_point_label' => [
               'title'             => __('Navn i kassen', 'bypost-woo'),
               'type'              => 'text',
-              'description'       => __('Her kan du velge hva fraktklassen skal hete i kassen.', 'bypost-woo'),
+              'description'       => __('Her kan du overstyre hva fraktklassen heter i kassen.', 'bypost-woo'),
               'default'           => __('Bypost: Hentested', 'bypost-woo'),
               'class'             => 'group-start group-heading--pickup',
             ],
@@ -246,8 +246,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'bring_product_id' => 5800,
               'weight' => $weight,
               'weight_unit' => 'kg',
+              'pickup_point_fallback' => $this->get_option('pickup_point_fallback'),
             ],
-            'package' => "shubidoo",
           );
           $this->add_rate($pickup_rate);
 
@@ -272,7 +272,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             'meta_data' => [
               'bring_product_id' => 5600,
               'weight' => $weight,
-              'weight_unit' => 'kg'
+              'weight_unit' => 'kg',
+              'door_delivery_fallback' => $this->get_option('door_delivery_fallback'),
             ]
           );
           $this->add_rate($door_rate);
@@ -341,7 +342,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
             }
             if ($weight > 0 && $this->has_weight_products($handle)) {
               // We're getting the field by handle, and adding a field suffix for each size
-              if ($weight < 2) return $this->get_option($handle . '_s');
+              if ($weight < 3) return $this->get_option($handle . '_s');
               if ($weight < 10) return $this->get_option($handle . '_m');
               if ($weight < 20) return $this->get_option($handle . '_l');
               if ($weight < 35) return $this->get_option($handle . '_xl');
