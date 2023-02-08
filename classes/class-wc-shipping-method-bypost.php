@@ -280,12 +280,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
           /**
            * Mailbox delivery rate
            */
-          $mailbox_label = $this->get_option('mailbox_label') !== ""
-            ? $this->get_option('mailbox_label')
+          $mailbox_label = $this->get_option('mailbox_delivery_label') !== ""
+            ? $this->get_option('mailbox_delivery_label')
             : "Bypost (til postkasse)";
           if (in_array('mailbox', $free_shipping_rates)) {
-            $mailbox_label = __('Gratis frakt: ') . ($this->get_option('mailbox_label')
-              ? $this->get_option('mailbox_label')
+            $mailbox_label = __('Gratis frakt: ') . ($this->get_option('mailbox_delivery_label')
+              ? $this->get_option('mailbox_delivery_label')
               : 'Bypost (til postkasse)');
           }
 
