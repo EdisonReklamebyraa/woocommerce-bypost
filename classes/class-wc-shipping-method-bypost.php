@@ -248,7 +248,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'pickup_point_fallback' => $this->get_option('pickup_point_fallback'),
             ],
           );
-          $this->add_rate($pickup_rate);
+          if ($pickup_cost) {
+            $this->add_rate($pickup_rate);
+          }
 
           /**
            * Door delivery rate
@@ -275,7 +277,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'door_delivery_fallback' => $this->get_option('door_delivery_fallback'),
             ]
           );
-          $this->add_rate($door_rate);
+          if ($door_cost) {
+            $this->add_rate($door_rate);
+          }
 
           /**
            * Mailbox delivery rate
@@ -300,7 +304,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
               'weight_unit' => null
           );
 
-          if ($weight < MAX_ALLOWED_LETTER_KG) {
+          if ($mailbox_cost && $weight < MAX_ALLOWED_LETTER_KG) {
             $this->add_rate($mailbox_rate);
           }
 
