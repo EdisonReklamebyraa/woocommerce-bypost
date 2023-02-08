@@ -6,6 +6,7 @@
  * Gå til Orders og sett ordren til fullført.
 */
 
+
 add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
 
 /**
@@ -19,7 +20,6 @@ function bypost_status_change($order_id, $from, $to) {
     create_order_in_bypost($order_id);
   }
 }
-
 
 // Finn ut hvordan vi får weight, bring_id
 // og deretter lag ferdig metoden:
@@ -64,12 +64,23 @@ function get_product_size($bring_id, $weight, $order) {
  */
 function create_order_in_bypost( $order_id ) {
   $order = new WC_Order($order_id);
-
   $bypost_key = reset($order->get_shipping_methods())->get_meta('bypost_key');
   $phone = reset($order->get_shipping_methods())->get_meta('kundetelefon');
   $bring_id = reset($order->get_shipping_methods())->get_meta('bring_product_id');
   $weight = reset($order->get_shipping_methods())->get_meta('weight');
 
+  // Finn bypostnøkkelen
+  $wc_methods = WC()->shipping->get_shipping_methods();
+  $bypost_key = null;
+  foreach ($wc_methods as $method) {
+    if ($method->id === 'bypost_shipping_method') {
+      $bypost_key = $method->get_option('bypost_key');
+      $phone = $method->get_option('kundetelefon');
+    }
+  }
+
+  $shipping_method = reset($order->get_shipping_methods())->get_meta('bring_id');
+  error_log('Current shipping method: ' . $shipping_method);
   $data = [
     "customer_name"        => get_option('woocommerce_email_from_name') ?? '',
     "customer_address_1"   => get_option('woocommerce_store_address') ?? '',
@@ -88,6 +99,7 @@ function create_order_in_bypost( $order_id ) {
     "bring_id"             => $bring_id,
     "weight"               => $weight,
     "bypost_size"          => get_product_size($bring_id, $weight, $order),
+    "delivery_method"      => $shipping_method,
   ];
   $payload = json_encode(['order' => $data]);
   error_log('Data prepared for min.bypost: ' . print_r(json_decode($payload), true));

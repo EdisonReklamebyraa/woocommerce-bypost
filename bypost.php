@@ -23,6 +23,7 @@ if (!defined('ABSPATH')) {
   exit; // Exit if accessed directly.
 }
 
+<<<<<<< HEAD
 define('BYPOST_ROOT', plugin_dir_url(__FILE__));
 
 add_action('admin_enqueue_scripts', function() {
@@ -32,10 +33,15 @@ add_action('admin_enqueue_scripts', function() {
   wp_enqueue_script( 'bypost_admin_js' );
 });
 
+=======
+>>>>>>> origin/main
 require_once __DIR__ . '/classes/class-bypost.php';
 require_once __DIR__ . '/includes/bypost-api.php';
 require_once __DIR__ . '/includes/order-meta-fields.php';
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/main
 add_action('plugins_loaded', 'Bypost::init');
 register_deactivation_hook(__FILE__, 'Bypost::plugin_deactivate');

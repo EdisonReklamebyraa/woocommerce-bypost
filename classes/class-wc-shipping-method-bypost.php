@@ -31,7 +31,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
           );
           $this->init();
           $this->title              = __("Bypost", 'bypost-woo'); // This can be added as an setting but for this example its forced.
-
         }
 
         /**
@@ -366,7 +365,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
   }
 
   add_action('woocommerce_shipping_init', 'bypost_shipping_method_init');
-
 
   // Registrering av selve shipping-metoden
   function add_bypost_shipping_method($methods)
