@@ -16,7 +16,7 @@ add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
  */
 function bypost_status_change($order_id, $from, $to) {
   if ($to === "completed") {
-    error_log('Order is set to complete. Creating order with API.');
+    wc_get_logger()->debug("Order is set to complete. Creating order with API.", ['source' => 'woocommerce-bypost']);
     create_order_in_bypost($order_id);
   }
 }
@@ -55,6 +55,8 @@ function get_product_size($bring_id, $weight, $order) {
     if ($weight < 20) return 2; // L
     if ($weight < 35) return 3; // XL
   }
+
+  wc_get_logger()->debug("Unknown size", ['source' => 'woocommerce-bypost'])
   return "Unknown Size";
 }
 
@@ -80,7 +82,7 @@ function create_order_in_bypost( $order_id ) {
   }
 
   $shipping_method = reset($order->get_shipping_methods())->get_meta('bring_id');
-  error_log('Current shipping method: ' . $shipping_method);
+  wc_get_logger()->debug('Current shipping method: ' . $shipping_method, ['source' => 'woocommerce-bypost']);
   $data = [
     "customer_name"        => get_option('woocommerce_email_from_name') ?? '',
     "customer_address_1"   => get_option('woocommerce_store_address') ?? '',
@@ -102,11 +104,11 @@ function create_order_in_bypost( $order_id ) {
     "delivery_method"      => $shipping_method,
   ];
   $payload = json_encode(['order' => $data]);
-  error_log('Data prepared for min.bypost: ' . print_r(json_decode($payload), true));
+  wc_get_logger()->debug('Data prepared for min.bypost: ' . print_r(json_decode($payload), true), ['source' => 'woocommerce-bypost']);
   $url = "https://min.bypost.no/api/createparcelorder";
-  error_log('Using endpoint: ' . $url);
+  wc_get_logger()->debug('Using endpoint: ' . $url, ['source' => 'woocommerce-bypost']);
   $bearer = $bypost_key;
-  error_log('Current API-Key: ' . $bearer);
+  wc_get_logger()->debug('Current API-Key: ' . $bearer, ['source' => 'woocommerce-bypost']);
 
   $curl = curl_init();
   curl_setopt_array($curl, array(
@@ -128,13 +130,13 @@ function create_order_in_bypost( $order_id ) {
   $response = curl_exec($curl);
   curl_close($curl);
   if ($response) {
-    error_log('Response from API: ' . print_r($response, true));
+    wc_get_logger()->debug('Response from API: ' . print_r($response, true), ['source' => 'woocommerce-bypost']);
     $order->update_meta_data('packing_slip', json_decode($response)->label);
     $order->update_meta_data('tracking_url', json_decode($response)->tracking);
     $order->save();
-    error_log('Added packing slip and tracking url to order metadata');
+    wc_get_logger()->debug('Added packing slip and tracking url to order metadata', ['source' => 'woocommerce-bypost']);
   } else {
-    error_log('Error: ' . print_r($response, true));
+    wc_get_logger()->debug('Error: ' . print_r($response, true), ['source' => 'woocommerce-bypost']);
   }
 }
 
