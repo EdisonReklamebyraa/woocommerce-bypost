@@ -56,7 +56,7 @@ function get_product_size($bring_id, $weight, $order) {
     if ($weight < 35) return 3; // XL
   }
 
-  wc_get_logger()->debug("Unknown size", ['source' => 'woocommerce-bypost'])
+  wc_get_logger()->debug("Unknown size", ['source' => 'woocommerce-bypost']);
   return "Unknown Size";
 }
 
