@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name: Bypost
  * Description: Plugin for frakt med Bypost
- * Version:     1.1.0
+ * Version:     1.1.3
  * Author:      Edge Branding
  * Author URI:  https://edgebranding.no
  * Text Domain: bypost

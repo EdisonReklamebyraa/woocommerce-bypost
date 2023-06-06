@@ -98,10 +98,9 @@ function create_order_in_bypost( $order_id ) {
     "recipient_city"       => $order->get_shipping_city() ?? '',
     "recipient_email"      => $order->get_billing_email() ?? '',
     "recipient_phone"      => $order->get_billing_phone() ?? '',
-    "bring_id"             => $bring_id,
     "weight"               => $weight,
     "bypost_size"          => get_product_size($bring_id, $weight, $order),
-    "delivery_method"      => $shipping_method,
+    "delivery_method"      => $bring_id,
   ];
   $payload = json_encode(['order' => $data]);
   wc_get_logger()->debug('Data prepared for min.bypost: ' . print_r(json_decode($payload), true), ['source' => 'woocommerce-bypost']);
