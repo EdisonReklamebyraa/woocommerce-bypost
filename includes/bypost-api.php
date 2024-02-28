@@ -15,14 +15,12 @@ add_action('woocommerce_order_status_changed', 'bypost_status_change', 10, 3);
  * @param to er hvilken status ordren har blitt endret til
  */
 function bypost_status_change($order_id, $from, $to) {
-  if ($to === "completed") {
-    wc_get_logger()->debug("Order is set to complete. Creating order with API.", ['source' => 'woocommerce-bypost']);
-    create_order_in_bypost($order_id);
+  $order = new WC_Order($order_id);
+  if ($to === "completed" && $order->has_shipping_method('bypost_shipping_method')) {
+    error_log("Order uses bypost shipping and is set to complete. Creating order with API.");
+    create_order_in_bypost($order);
   }
 }
-
-// Finn ut hvordan vi får weight, bring_id
-// og deretter lag ferdig metoden:
 
 function get_product_size($bring_id, $weight, $order) {
   define('MAILBOX_DELIVERY', 3584);
@@ -64,8 +62,7 @@ function get_product_size($bring_id, $weight, $order) {
  * Dette gjør en POST mot min.bypost-API'et, med
  * data som trengs for å bestille en pakkesending fra Bring.
  */
-function create_order_in_bypost( $order_id ) {
-  $order = new WC_Order($order_id);
+function create_order_in_bypost( $order ) {
   $bypost_key = reset($order->get_shipping_methods())->get_meta('bypost_key');
   $phone = reset($order->get_shipping_methods())->get_meta('kundetelefon');
   $bring_id = reset($order->get_shipping_methods())->get_meta('bring_product_id');
